@@ -510,5 +510,8 @@ CHAR LIMIT = NONE] -->
     <string name="pref_camera_burst_entry_10">10 shots</string>
     <string name="pref_camera_burst_entry_15">15 shots</string>
     <string name="pref_camera_burst_entry_20">20 shots</string>
+     <!-- More Settings screen, power button title -->
+     <string name="pref_camera_power_shutter_title">Power shutter</string>
+     <string name="pref_camera_power_shutter_default">off</string>
 
 </resources>
