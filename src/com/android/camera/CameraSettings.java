@@ -254,31 +254,36 @@ public class CameraSettings {
 
     private void buildExposureCompensation(
             PreferenceGroup group, IconListPreference exposure) {
-        int max = mParameters.getMaxExposureCompensation();
-        int min = mParameters.getMinExposureCompensation();
-        if (max == 0 && min == 0) {
-            removePreference(group, exposure.getKey());
-            return;
-        }
-        float step = mParameters.getExposureCompensationStep();
+        //HOX max exposure = 12, min exposure = -12, step = 0.25
+        CharSequence entries[] = new CharSequence[7];
+        CharSequence entryValues[] = new CharSequence[7];
+        int[] icons = new int[7];
 
-        // show only integer values for exposure compensation
-        // Limit values to -5..5 due to the limitation in the icon
-        // resource array
-        int maxValue = Math.min((int) FloatMath.floor(max * step), 5);
-        int minValue = Math.max((int) FloatMath.ceil(min * step), -5);
-        CharSequence entries[] = new CharSequence[maxValue - minValue + 1];
-        CharSequence entryValues[] = new CharSequence[maxValue - minValue + 1];
-        int[] icons = new int[maxValue - minValue + 1];
-        TypedArray iconIds = mContext.getResources().obtainTypedArray(
-                R.array.pref_camera_exposure_icons);
-        for (int i = minValue; i <= maxValue; ++i) {
-            entryValues[maxValue - i] = Integer.toString(Math.round(i / step));
-            StringBuilder builder = new StringBuilder();
-            if (i > 0) builder.append('+');
-            entries[maxValue - i] = builder.append(i).toString();
-            icons[maxValue - i] = iconIds.getResourceId(5 + i, 0);
-        }
+        entries[6] = "-3";
+        entries[5] = "-2";
+        entries[4] = "-1";
+        entries[3] = "0";
+        entries[2] = "+1";
+        entries[1] = "+2";
+        entries[0] = "+3";
+
+	entryValues[6] = "-12";
+	entryValues[5] = "-8";
+	entryValues[4] = "-4";
+	entryValues[3] = "0";
+	entryValues[2] = "4";
+	entryValues[1] = "8";
+	entryValues[0] = "12";
+
+	TypedArray iconIds = mContext.getResources().obtainTypedArray(R.array.pref_camera_exposure_icons);
+	icons[6] = iconIds.getResourceId(0, 0);
+	icons[5] = iconIds.getResourceId(1, 0);
+      	icons[4] = iconIds.getResourceId(2, 0);
+	icons[3] = iconIds.getResourceId(3, 0);
+	icons[2] = iconIds.getResourceId(4, 0);
+	icons[1] = iconIds.getResourceId(5, 0);
+	icons[0] = iconIds.getResourceId(6, 0);
+
         exposure.setUseSingleIcon(true);
         exposure.setEntries(entries);
         exposure.setEntryValues(entryValues);

@@ -813,28 +813,28 @@ public class PhotoModule
             return;
         }
         int id = 0;
-        float step = mParameters.getExposureCompensationStep();
-        value = (int) Math.round(value * step);
+        //float step = mParameters.getExposureCompensationStep();
+        //value = (int) Math.round(value * step);
         switch(value) {
-        case -3:
+        case -12:
             id = R.drawable.ic_indicator_ev_n3;
             break;
-        case -2:
+        case -8:
             id = R.drawable.ic_indicator_ev_n2;
             break;
-        case -1:
+        case -4:
             id = R.drawable.ic_indicator_ev_n1;
             break;
         case 0:
             id = R.drawable.ic_indicator_ev_0;
             break;
-        case 1:
+        case 4:
             id = R.drawable.ic_indicator_ev_p1;
             break;
-        case 2:
+        case 8:
             id = R.drawable.ic_indicator_ev_p2;
             break;
-        case 3:
+        case 12:
             id = R.drawable.ic_indicator_ev_p3;
             break;
         }
