@@ -114,6 +114,8 @@
 
     <!-- Settings screen, dialog choice for 8 megapixels picture size [CHAR LIMIT=15] -->
     <string name="pref_camera_picturesize_entry_8mp">8M pixels</string>
+    <!-- Settings screen, dialog choice for 8 megapixels picture size [CHAR LIMIT=15] -->
+    <string name="pref_camera_picturesize_entry_6mp_wide">6M pixels wide</string>
     <!-- Settings screen, dialog choice for 5 megapixels picture size [CHAR LIMIT=15] -->
     <string name="pref_camera_picturesize_entry_5mp">5M pixels</string>
     <!-- Settings screen, dialog choice for 3 megapixels picture size [CHAR LIMIT=15] -->
@@ -136,6 +138,7 @@
     <string name="pref_camera_focusmode_entry_auto">Auto</string>
     <string name="pref_camera_focusmode_entry_infinity">Infinity</string>
     <string name="pref_camera_focusmode_entry_macro">Macro</string>
+    <string name="pref_camera_focusmode_entry_fixed">Fixed</string>
 
     <!-- Default flash mode setting.-->
     <string name="pref_camera_flashmode_default" translatable="false">auto</string>
@@ -175,16 +178,32 @@
 
     <!-- Settings menu, scene mode choices [CHAR LIMIT=16] -->
     <string name="pref_camera_scenemode_entry_auto">Auto</string>
-    <!-- Scene mode that uses HDR (high dynamic range) [CHAR LIMIT=16] -->
-    <string name="pref_camera_scenemode_entry_hdr">HDR</string>
     <!-- Scene mode that takes an image quickly with little motion blur. [CHAR LIMIT=16] -->
     <string name="pref_camera_scenemode_entry_action">Action</string>
-    <!-- Scene mode that takes long exposures to capture night scenes without flash. [CHAR LIMIT=16] -->
+
+    <string name="pref_camera_scenemode_entry_portrait">Portrait</string>
+    <string name="pref_camera_scenemode_entry_landscape">Landscape</string>
+    <string name="pref_camera_scenemode_entry_beach">Beach</string>
+    <string name="pref_camera_scenemode_entry_fireworks">Fireworks</string>
     <string name="pref_camera_scenemode_entry_night">Night</string>
-    <!-- Scene mode optimized for taking images in the sunset. [CHAR LIMIT=16] -->
+    <string name="pref_camera_scenemode_entry_night_portrait">Night-Portrait</string>
+    <string name="pref_camera_scenemode_entry_snow">Snow</string>
+    <string name="pref_camera_scenemode_entry_sports">Sports</string>
+    <string name="pref_camera_scenemode_entry_steadyphoto">Steadyphoto</string>
     <string name="pref_camera_scenemode_entry_sunset">Sunset</string>
-    <!-- Scene mode optimized for taking indoor low-lights pictures. [CHAR LIMIT=16] -->
+    <string name="pref_camera_scenemode_entry_theatre">Theatre</string>
+    <string name="pref_camera_scenemode_entry_candlelight">Candlelight</string>
+    <string name="pref_camera_scenemode_entry_beauty_mode">Beauty mode</string>
+    <string name="pref_camera_scenemode_entry_background_blur">Background-Blur</string>
+    <string name="pref_camera_scenemode_entry_close_up">Close up</string>
+    <string name="pref_camera_scenemode_entry_white_board">Whiteboard</string>
+    <string name="pref_camera_scenemode_entry_flowers">Flowers</string>
+    <string name="pref_camera_scenemode_entry_hdr">HDR</string>
+<!--
+    <string name="pref_camera_scenemode_entry_night">Night</string>
+    <string name="pref_camera_scenemode_entry_sunset">Sunset</string>
     <string name="pref_camera_scenemode_entry_party">Party</string>
+-->
 
     <!-- Toast after trying to select a setting that is not allowed to change in scene mode [CHAR LIMIT=NONE] -->
     <string name="not_selectable_in_scene_mode">Not selectable in scene mode.</string>
