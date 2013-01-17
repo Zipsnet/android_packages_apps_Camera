@@ -83,7 +83,7 @@ public class Util {
     private static final String AUTO_EXPOSURE_LOCK_SUPPORTED = "auto-exposure-lock-supported";
     private static final String AUTO_WHITE_BALANCE_LOCK_SUPPORTED = "auto-whitebalance-lock-supported";
     private static final String VIDEO_SNAPSHOT_SUPPORTED = "video-snapshot-supported";
-    public static final String SCENE_MODE_HDR = "hdr";
+    public static final String SCENE_MODE_HDR = "backlight-hdr";
     public static final String TRUE = "true";
     public static final String FALSE = "false";
 
