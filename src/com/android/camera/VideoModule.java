@@ -238,6 +238,7 @@ public class VideoModule implements CameraModule,
 
     private int mVideoWidth;
     private int mVideoHeight;
+    private String mFlashMode;
 
     protected class CameraOpenThread extends Thread {
         @Override
@@ -667,6 +668,11 @@ public class VideoModule implements CameraModule,
 
     private void onStopVideoRecording() {
         mEffectsDisplayResult = true;
+        
+        if(!mFlashMode.equals(Parameters.FLASH_MODE_OFF)){
+        	doHandleTorch(false);
+        }
+                
         boolean recordFail = stopVideoRecording();
         if (mIsVideoCaptureIntent) {
             if (!effectsActive()) {
@@ -1592,6 +1598,7 @@ public class VideoModule implements CameraModule,
 
     private void startVideoRecording() {
         Log.v(TAG, "startVideoRecording");
+        
         mActivity.setSwipingEnabled(false);
 
         mActivity.updateStorageSpaceAndHint();
@@ -1643,6 +1650,10 @@ public class VideoModule implements CameraModule,
         // update mParameters here once.
         if (ApiHelper.HAS_ZOOM_WHEN_RECORDING) {
             mParameters = mActivity.mCameraDevice.getParameters();
+        }
+
+        if(!mFlashMode.equals(Parameters.FLASH_MODE_OFF)){
+        	doHandleTorch(true);
         }
 
         enableCameraControls(false);
@@ -1948,21 +1959,21 @@ public class VideoModule implements CameraModule,
         CameraSettings.setEarlyVideoSize(mParameters, mProfile);
 
         // Set flash mode.
-        String flashMode;
+        mFlashMode = Parameters.FLASH_MODE_OFF;
         if (mActivity.mShowCameraAppView) {
-            flashMode = mPreferences.getString(
+            mFlashMode = mPreferences.getString(
                     CameraSettings.KEY_VIDEOCAMERA_FLASH_MODE,
                     mActivity.getString(R.string.pref_camera_video_flashmode_default));
         } else {
-            flashMode = Parameters.FLASH_MODE_OFF;
+            mFlashMode = Parameters.FLASH_MODE_OFF;
         }
         List<String> supportedFlash = mParameters.getSupportedFlashModes();
-        if (isSupported(flashMode, supportedFlash)) {
-            mParameters.setFlashMode(flashMode);
+        if (isSupported(mFlashMode, supportedFlash)) {
+            mParameters.setFlashMode(mFlashMode);
         } else {
-            flashMode = mParameters.getFlashMode();
-            if (flashMode == null) {
-                flashMode = mActivity.getString(
+            mFlashMode = mParameters.getFlashMode();
+            if (mFlashMode == null) {
+                mFlashMode = mActivity.getString(
                         R.string.pref_camera_flashmode_no_flash);
             }
         }
@@ -2040,7 +2051,6 @@ public class VideoModule implements CameraModule,
         }
 
         CameraSettings.dumpParameters(mParameters);
-
         mActivity.mCameraDevice.setParameters(mParameters);
         // Keep preview size up to date.
         mParameters = mActivity.mCameraDevice.getParameters();
@@ -2928,5 +2938,9 @@ public class VideoModule implements CameraModule,
         if (mPieRenderer.showsItems()) {
             mPieRenderer.hide();
         }
+    }
+  
+    private void doHandleTorch(boolean value) {
+    	Util.doHandleTorch(value);
     }
 }
