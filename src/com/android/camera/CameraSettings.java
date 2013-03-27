@@ -403,10 +403,10 @@ public class CameraSettings {
         }
         if (version == 1) {
             // Change jpeg quality {65,75,85} to {normal,fine,superfine}
-            String quality = pref.getString(KEY_JPEG_QUALITY, "85");
-            if (quality.equals("65")) {
+            String quality = pref.getString(KEY_JPEG_QUALITY, "100");
+            if (quality.equals("70")) {
                 quality = "normal";
-            } else if (quality.equals("75")) {
+            } else if (quality.equals("80")) {
                 quality = "fine";
             } else {
                 quality = "superfine";
