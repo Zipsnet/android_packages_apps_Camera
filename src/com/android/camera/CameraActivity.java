@@ -176,8 +176,8 @@ public class CameraActivity extends ActivityBase
             case LIGHTCYCLE_MODULE_INDEX:
                 mCurrentModule = LightCycleHelper.createPanoramaModule();
                 break;
-            break;
-                case GALLERY_MODULE_INDEX:
+            case GALLERY_MODULE_INDEX:
+                break;
         }
         openModule(mCurrentModule, canReuse);
         mCurrentModule.onOrientationChanged(mLastRawOrientation);
