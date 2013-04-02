@@ -202,8 +202,6 @@
         <item>@string/pref_camera_focusmode_entry_continuouspicture</item>
         <item>@string/pref_camera_focusmode_entry_continuousvideo</item>
         <item>@string/pref_camera_focusmode_entry_extended</item>
-        <item>@string/pref_camera_focusmode_entry_facedetect</item>
-        <item>@string/pref_camera_focusmode_entry_facepriority</item>
         <item>@string/pref_camera_focusmode_entry_fixed</item>
         <item>@string/pref_camera_focusmode_entry_infinity</item>
         <item>@string/pref_camera_focusmode_entry_macro</item>
@@ -216,8 +214,6 @@
         <item>continuous-picture</item>
         <item>continuous-video</item>
         <item>extended</item>
-        <item>facedetect</item>
-        <item>face-priority</item>
         <item>fixed</item>
         <item>infinity</item>
         <item>macro</item>
