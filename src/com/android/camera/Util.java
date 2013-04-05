@@ -516,7 +516,7 @@ public class Util {
     public static Size getOptimalPreviewSize(Activity currentActivity,
             List<Size> sizes, double targetRatio) {
         // Use a very small tolerance because we want an exact match.
-        final double ASPECT_TOLERANCE = 0.001;
+        final double ASPECT_TOLERANCE = 0.01;
         if (sizes == null) return null;
 
         Size optimalSize = null;
@@ -541,7 +541,7 @@ public class Util {
         // Cannot find the one match the aspect ratio. This should not happen.
         // Ignore the requirement.
         if (optimalSize == null) {
-            Log.w(TAG, "No preview size match the aspect ratio");
+            Log.w(TAG, "No preview size match the aspect ratio "+targetRatio);
             minDiff = Double.MAX_VALUE;
             for (Size size : sizes) {
                 if (Math.abs(size.height - targetHeight) < minDiff) {

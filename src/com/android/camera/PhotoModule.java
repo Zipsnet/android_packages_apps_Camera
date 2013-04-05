@@ -172,7 +172,6 @@ public class PhotoModule
     private boolean mFaceDetectionStarted = false;
 
     private PreviewFrameLayout mPreviewFrameLayout;
-    private Object mSurfaceTexture;
 
     // for API level 10
     private PreviewSurfaceView mPreviewSurfaceView;
@@ -1882,11 +1881,8 @@ public class PhotoModule
         }
         stopPreview();
         // Close the camera now because other activities may need to use it.
-        closeCamera();
-        if (mSurfaceTexture != null) {
-            ((CameraScreenNail) mActivity.mCameraScreenNail).releaseSurfaceTexture();
-            mSurfaceTexture = null;
-        }
+        closeCamera();     
+        releasePreviewResources();
         resetScreenOn();
 
         // Load the power shutter
@@ -1926,6 +1922,15 @@ public class PhotoModule
         if (mFocusManager != null) mFocusManager.removeMessages();
     }
 
+    private void releasePreviewResources() {
+        if (ApiHelper.HAS_SURFACE_TEXTURE) {
+            CameraScreenNail screenNail = (CameraScreenNail) mActivity.mCameraScreenNail;
+            if (screenNail.getSurfaceTexture() != null) {
+                screenNail.releaseSurfaceTexture();
+            }
+        }
+    }
+    
     private void initializeControlByIntent() {
         mBlocker = mRootView.findViewById(R.id.blocker);
         mMenu = mRootView.findViewById(R.id.menu);
@@ -2257,6 +2262,27 @@ public class PhotoModule
         startFaceDetection();
     }
 
+    private void updateCameraScreenNailSize(int width, int height) {
+        if (!ApiHelper.HAS_SURFACE_TEXTURE) return;
+
+		Log.v(TAG, "updateCameraScreenNailSize preview size "+width+"x"+height);
+        if (mCameraDisplayOrientation % 180 != 0) {
+            int tmp = width;
+            width = height;
+            height = tmp;
+        }
+
+        CameraScreenNail screenNail = (CameraScreenNail) mActivity.mCameraScreenNail;
+		        
+        screenNail.setSize(width, height);
+       	screenNail.enableAspectRatioClamping();
+        mActivity.notifyScreenNailChanged();
+
+        if (screenNail.getSurfaceTexture() == null) {
+            screenNail.acquireSurfaceTexture();
+        }
+    }
+    
     // This can be called by UI Thread or CameraStartUpThread. So this should
     // not modify the views.
     private void startPreview() {
@@ -2283,22 +2309,13 @@ public class PhotoModule
         }
         setCameraParameters(UPDATE_PARAM_ALL);
 
+        Size size = mParameters.getPreviewSize();
+
         if (ApiHelper.HAS_SURFACE_TEXTURE) {
-            CameraScreenNail screenNail = (CameraScreenNail) mActivity.mCameraScreenNail;
-            if (mSurfaceTexture == null) {
-                Size size = mParameters.getPreviewSize();
-                if (mCameraDisplayOrientation % 180 == 0) {
-                    screenNail.setSize(size.width, size.height);
-                } else {
-                    screenNail.setSize(size.height, size.width);
-                }
-                screenNail.enableAspectRatioClamping();
-                mActivity.notifyScreenNailChanged();
-                screenNail.acquireSurfaceTexture();
-                mSurfaceTexture = screenNail.getSurfaceTexture();
-            }
+        	updateCameraScreenNailSize(size.width, size.height);
+
             mCameraDevice.setDisplayOrientation(mCameraDisplayOrientation);
-            mCameraDevice.setPreviewTextureAsync((SurfaceTexture) mSurfaceTexture);
+            mCameraDevice.setPreviewTextureAsync(((CameraScreenNail) mActivity.mCameraScreenNail).getSurfaceTexture());
         } else {
             mCameraDevice.setDisplayOrientation(mDisplayOrientation);
             mCameraDevice.setPreviewDisplayAsync(mCameraSurfaceHolder);
