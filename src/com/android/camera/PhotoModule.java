@@ -1338,7 +1338,6 @@ public class PhotoModule
         mParameters.setRotation(mJpegRotation);
         Location loc = mLocationManager.getCurrentLocation();
         Util.setGpsParameters(mParameters, loc);
-        CameraSettings.dumpParameters(mParameters);
         mCameraDevice.setParameters(mParameters);
 
         mCameraDevice.takePicture2(mShutterCallback, mRawPictureCallback,

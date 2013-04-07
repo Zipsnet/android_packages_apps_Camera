@@ -61,9 +61,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.File;
 
 /**
  * Collection of utility functions used in this package.
@@ -833,35 +830,5 @@ public class Util {
 
             return result;
         }
-    }
-
-    private static boolean writeOneLine(String filename, String value) {
-        FileWriter fileWriter = null;
-        try {
-            fileWriter = new FileWriter(filename);
-            fileWriter.write(value);
-        } catch (IOException e) {
-            String Error = "Error writing { " + value + " } to file: " + filename;
-            Log.e(TAG, Error, e);
-            return false;
-        } finally {
-            if (fileWriter != null) {
-                try {
-                    fileWriter.close();
-                } catch (IOException ignored) {
-                    // failed to close writer
-                }
-            }
-        }
-        return true;
-    }   
-     
-    public static void doHandleTorch(boolean value) {
-    	final String flashDevice = "/sys/class/leds/flashlight/brightness";
-    	
-    	File f = new File(flashDevice);
-    	if(f.exists() && f.canWrite()){
-    		writeOneLine(flashDevice, value?"1":"0");
-    	}
     }
 }
