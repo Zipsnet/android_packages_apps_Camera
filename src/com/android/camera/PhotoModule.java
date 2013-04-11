@@ -45,6 +45,7 @@ import android.os.MessageQueue;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -314,7 +315,8 @@ public class PhotoModule
     ConditionVariable mStartPreviewPrerequisiteReady = new ConditionVariable();
 
     private PreviewGestures mGestures;
-
+	private boolean mTruePreview = false;
+	
     // The purpose is not to block the main thread in onCreate and onResume.
     private class CameraStartUpThread extends Thread {
         private volatile boolean mCancelled;
@@ -2172,23 +2174,34 @@ public class PhotoModule
         setCameraState(IDLE);
         startFaceDetection();
     }
-
+    
     private void updateCameraScreenNailSize(int width, int height) {
         if (!ApiHelper.HAS_SURFACE_TEXTURE) return;
+        
+		Log.v(TAG, "updateCameraScreenNailSize preview size "+width+"x"+height + " truePreview "+mTruePreview);
 
-		Log.v(TAG, "updateCameraScreenNailSize preview size "+width+"x"+height);
         if (mCameraDisplayOrientation % 180 != 0) {
             int tmp = width;
             width = height;
             height = tmp;
         }
-
-        CameraScreenNail screenNail = (CameraScreenNail) mActivity.mCameraScreenNail;
 		        
-        screenNail.setSize(width, height);
-       	screenNail.enableAspectRatioClamping();
-        mActivity.notifyScreenNailChanged();
+        CameraScreenNail screenNail = (CameraScreenNail) mActivity.mCameraScreenNail;
 
+        screenNail.setSize(width, height);
+
+        if (!mTruePreview){
+            Display display = mActivity.getWindowManager().getDefaultDisplay();
+            if (Util.getDisplayRotation(mActivity) % 180 == 0)
+                screenNail.setPreviewFrameLayoutSize(display.getWidth(), display.getHeight()); 
+            else     
+                screenNail.setPreviewFrameLayoutSize(display.getHeight(), display.getWidth()); 
+            screenNail.enableAspectRatioClamping();
+        } else {
+            screenNail.setPreviewFrameLayoutSize(width, height);
+        }
+        mActivity.notifyScreenNailChanged();
+                    
         if (screenNail.getSurfaceTexture() == null) {
             screenNail.acquireSurfaceTexture();
         }
@@ -2469,6 +2482,15 @@ public class PhotoModule
         if (mContinousFocusSupported && ApiHelper.HAS_AUTO_FOCUS_MOVE_CALLBACK) {
             updateAutoFocusMoveCallback();
         }
+        
+        String truePreviewValue = mPreferences.getString(CameraSettings.KEY_TRUE_PREVIEW, CameraSettings.VALUE_OFF);
+        boolean truePreview = truePreviewValue.equals(CameraSettings.VALUE_ON);
+        if (truePreview != mTruePreview){
+            mTruePreview = truePreview;
+            Log.d(TAG, "true preview changed");
+            Size previewSize = mParameters.getPreviewSize();
+            updateCameraScreenNailSize(previewSize.width, previewSize.height);
+        }        
     }
 
     @TargetApi(ApiHelper.VERSION_CODES.JELLY_BEAN)

@@ -46,6 +46,7 @@ import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Video;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -235,6 +236,8 @@ public class VideoModule implements CameraModule,
     private List<Integer> mZoomRatios;
     private boolean mRestoreFlash;  // This is used to check if we need to restore the flash
                                     // status when going back from gallery.
+
+    private boolean mTruePreview = false;
 
     protected class CameraOpenThread extends Thread {
         @Override
@@ -2048,26 +2051,39 @@ public class VideoModule implements CameraModule,
         // Keep preview size up to date.
         mParameters = mActivity.mCameraDevice.getParameters();
 
+        String truePreviewValue = mPreferences.getString(CameraSettings.KEY_TRUE_PREVIEW, CameraSettings.VALUE_OFF);
+        mTruePreview = truePreviewValue.equals(CameraSettings.VALUE_ON);
+
         updateCameraScreenNailSize(mDesiredPreviewWidth, mDesiredPreviewHeight);
     }
 
     private void updateCameraScreenNailSize(int width, int height) {
         if (!ApiHelper.HAS_SURFACE_TEXTURE) return;
+        
+		Log.v(TAG, "updateCameraScreenNailSize preview size "+width+"x"+height + " truePreview "+mTruePreview);
 
-		Log.v(TAG, "updateCameraScreenNailSize preview size "+width+"x"+height);
-		
         if (mCameraDisplayOrientation % 180 != 0) {
             int tmp = width;
             width = height;
             height = tmp;
         }
-
+		        
         CameraScreenNail screenNail = (CameraScreenNail) mActivity.mCameraScreenNail;
 
         screenNail.setSize(width, height);
-        screenNail.enableAspectRatioClamping();
-        mActivity.notifyScreenNailChanged();
 
+        if (!mTruePreview){
+            Display display = mActivity.getWindowManager().getDefaultDisplay();
+            if (Util.getDisplayRotation(mActivity) % 180 == 0)
+                screenNail.setPreviewFrameLayoutSize(display.getWidth(), display.getHeight()); 
+            else     
+                screenNail.setPreviewFrameLayoutSize(display.getHeight(), display.getWidth()); 
+            screenNail.enableAspectRatioClamping();
+        } else {
+            screenNail.setPreviewFrameLayoutSize(width, height);
+        }
+        mActivity.notifyScreenNailChanged();
+                    
         if (screenNail.getSurfaceTexture() == null) {
             screenNail.acquireSurfaceTexture();
         }
