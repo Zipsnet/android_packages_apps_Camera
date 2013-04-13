@@ -74,7 +74,8 @@ public class CameraSettings {
     public static final String KEY_BURST_MODE = "pref_camera_burst_key";
     public static final String KEY_TIMER_MODE = "pref_camera_timer_key";
     public static final String KEY_TRUE_PREVIEW = "pref_true_preview";
-    
+    public static final String KEY_STORAGE = "pref_camera_storage_key";
+
     public static final String EXPOSURE_DEFAULT_VALUE = "0";
     public static final String VALUE_ON = "on";
     public static final String VALUE_OFF = "off";
@@ -185,6 +186,7 @@ public class CameraSettings {
         ListPreference isoMode = group.findPreference(KEY_ISO_MODE);
         ListPreference jpegQuality = group.findPreference(KEY_JPEG);
         ListPreference colorEffect = group.findPreference(KEY_COLOR_EFFECT);
+        ListPreference storage = group.findPreference(KEY_STORAGE);
 
         // Since the screen could be loaded from different resources, we need
         // to check if the preference is available here
@@ -251,6 +253,11 @@ public class CameraSettings {
         if (colorEffect != null) {
             filterUnsupportedOptions(group,
                     colorEffect, mParameters.getSupportedColorEffects());
+        }
+        if (storage != null) {
+            if (storage.getEntries().length < 2) {
+                removePreference(group, storage.getKey());
+            }
         }
     }
 
