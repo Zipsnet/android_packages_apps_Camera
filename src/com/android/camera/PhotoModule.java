@@ -477,6 +477,12 @@ public class PhotoModule
         // This must be done before startPreview.
         mIsImageCaptureIntent = isImageCaptureIntent();
 
+        if (reuseNail) {
+            mActivity.reuseCameraScreenNail(!mIsImageCaptureIntent);
+        } else {
+            mActivity.createCameraScreenNail(!mIsImageCaptureIntent);
+        }
+
         mPreferences.setLocalId(mActivity, mCameraId);
         CameraSettings.upgradeLocalPreferences(mPreferences.getLocal());
         // we need to reset exposure for the preview
@@ -490,12 +496,6 @@ public class PhotoModule
         initializeMiscControls();
         mLocationManager = new LocationManager(mActivity, this);
         initOnScreenIndicator();
-
-        if (reuseNail) {
-            mActivity.reuseCameraScreenNail(!mIsImageCaptureIntent);
-        } else {
-            mActivity.createCameraScreenNail(!mIsImageCaptureIntent);
-        }
     }
 
     // Prompt the user to pick to record location for the very first run of
