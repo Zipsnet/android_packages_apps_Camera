@@ -485,6 +485,7 @@ public class PhotoModule
 
         mPreferences.setLocalId(mActivity, mCameraId);
         CameraSettings.upgradeLocalPreferences(mPreferences.getLocal());
+        mActivity.setStoragePath(mPreferences);
         // we need to reset exposure for the preview
         resetExposureCompensation();
         // Starting the preview needs preferences, camera screen nail, and
@@ -542,7 +543,7 @@ public class PhotoModule
             .apply();
         // TODO: Fix this to use the actual onSharedPreferencesChanged listener
         // instead of invoking manually
-        onSharedPreferenceChanged(RecordLocationPreference.KEY);
+        onSharedPreferenceChanged();
     }
 
     private void initializeRenderOverlay() {
@@ -2600,7 +2601,7 @@ public class PhotoModule
     }
 
     @Override
-    public void onSharedPreferenceChanged(String key) {
+    public void onSharedPreferenceChanged() {
         // ignore the events after "onPause()"
         if (mPaused) return;
 
@@ -2608,7 +2609,7 @@ public class PhotoModule
                 mPreferences, mContentResolver);
         mLocationManager.recordLocation(recordLocation);
 
-        if (CameraSettings.KEY_STORAGE.equals(key)) {
+        if (mActivity.setStoragePath(mPreferences)) {
             mActivity.updateStorageSpaceAndHint();
             mActivity.reuseCameraScreenNail(!mIsImageCaptureIntent);
         }
