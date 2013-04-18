@@ -698,19 +698,18 @@ public class PhotoModule
     }
 
     private void processZoomValueChanged(int index) {
-        if (index >= 0 && index <= mZoomMax) {
-            mZoomRenderer.setZoom(index);
+        if (index >= 0 && index <= mZoomMax && mZoomValue != index) {
+            mZoomValue = index;
+            mZoomRenderer. setZoom(index);
             // Not useful to change zoom value when the activity is paused.
             if (mPaused) return;
-            mZoomValue = index;
             if (mParameters == null || mCameraDevice == null) return;
             // Set zoom parameters asynchronously
             mParameters.setZoom(mZoomValue);
             mCameraDevice.setParametersAsync(mParameters);
-            if (mZoomRenderer != null) {
-                Parameters p = mCameraDevice.getParameters();
-                mZoomRenderer.setZoomValue(mZoomRatios.get(p.getZoom()));
-            }
+            // for our camera we dont need to refetch the parameters again
+            //Parameters p = mCameraDevice.getParameters();
+            mZoomRenderer.setZoomValue(mZoomRatios.get(mParameters.getZoom()));
         }
     }
 
