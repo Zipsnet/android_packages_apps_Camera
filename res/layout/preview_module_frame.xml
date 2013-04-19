@@ -41,10 +41,6 @@
             android:id="@+id/render_overlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-        <com.android.camera.ui.RotateLayout android:id="@+id/timer_mode_rect"
-                style="@style/ViewfinderLabelLayout">
-            <include layout="@layout/viewfinder_labels" android:id="@+id/labels" />
-        </com.android.camera.ui.RotateLayout>
     </com.android.camera.PreviewFrameLayout>
     <ImageView android:id="@+id/capture_anim_view"
             android:layout_width="match_parent"
