@@ -103,7 +103,7 @@ public class VideoController extends PieController
                 CameraSettings.KEY_VIDEOCAMERA_CONTRAST,
                 CameraSettings.KEY_VIDEOCAMERA_SHARPNESS};
 
-        PieItem settingsItem = makeItem(R.drawable.ic_effects_holo_light);
+        PieItem settingsItem = makeItem(R.drawable.ic_settings_holo_light);
         settingsItem.setFixedSlice(FLOAT_PI_DIVIDED_BY_TWO *3, sweep);
         settingsItem.setOnClickListener(new OnClickListener() {
             @Override
@@ -117,7 +117,7 @@ public class VideoController extends PieController
         });
         mRenderer.addItem(settingsItem);
 
-        PieItem pictureItem = makeItem(R.drawable.ic_settings_holo_light);
+        PieItem pictureItem = makeItem(R.drawable.ic_effects_holo_light);
         pictureItem.setFixedSlice(3 * FLOAT_PI_DIVIDED_BY_TWO - sweep, sweep);
         pictureItem.setOnClickListener(new OnClickListener() {
             @Override
