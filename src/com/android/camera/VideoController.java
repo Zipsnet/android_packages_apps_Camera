@@ -39,10 +39,15 @@ public class VideoController extends PieController
 
     private VideoModule mModule;
     private String[] mOtherKeys;
+    private String[] mPictureKeys;
+
     // First level popup
     private MoreSettingPopup mPopup;
     // Second level popup
     private AbstractSettingPopup mSecondPopup;
+    // First level popup
+    private MoreSettingPopup mPicturePopup;
+    private MoreSettingPopup mActivePopup;
 
     public VideoController(CameraActivity activity, VideoModule module, PieRenderer pie) {
         super(activity, pie);
@@ -52,11 +57,12 @@ public class VideoController extends PieController
     public void initialize(PreferenceGroup group) {
         super.initialize(group);
         mPopup = null;
+        mPicturePopup = null;
         mSecondPopup = null;
         float sweep = FLOAT_PI_DIVIDED_BY_TWO / 2;
 
         addItem(CameraSettings.KEY_VIDEOCAMERA_FLASH_MODE, FLOAT_PI_DIVIDED_BY_TWO - sweep, sweep);
-        addItem(CameraSettings.KEY_EXPOSURE, 3 * FLOAT_PI_DIVIDED_BY_TWO - sweep, sweep);
+        addItem(CameraSettings.KEY_VIDEOCAMERA_EXPOSURE, 3 * FLOAT_PI_DIVIDED_BY_TWO - 2 * sweep, sweep);
         addItem(CameraSettings.KEY_VIDEOCAMERA_WHITE_BALANCE, 3 * FLOAT_PI_DIVIDED_BY_TWO + sweep, sweep);
         if (group.findPreference(CameraSettings.KEY_CAMERA_ID) != null) {
             PieItem item = makeItem(R.drawable.ic_switch_video_facing_holo_light);
@@ -85,24 +91,45 @@ public class VideoController extends PieController
                 CameraSettings.KEY_VIDEO_QUALITY,
                 CameraSettings.KEY_RECORD_LOCATION,
                 CameraSettings.KEY_POWER_SHUTTER,
-                CameraSettings.KEY_TRUE_PREVIEW,
+                CameraSettings.KEY_TRUE_PREVIEW};
+
+        mPictureKeys= new String[] {
                 CameraSettings.KEY_VIDEOCAMERA_FLASH_MODE,
                 CameraSettings.KEY_VIDEOCAMERA_WHITE_BALANCE,
                 CameraSettings.KEY_VIDEOCAMERA_COLOR_EFFECT,
-                CameraSettings.KEY_VIDEOCAMERA_JPEG};
+                CameraSettings.KEY_VIDEOCAMERA_JPEG,
+                CameraSettings.KEY_VIDEOCAMERA_EXPOSURE,
+                CameraSettings.KEY_VIDEOCAMERA_SATURATION,
+                CameraSettings.KEY_VIDEOCAMERA_CONTRAST,
+                CameraSettings.KEY_VIDEOCAMERA_SHARPNESS};
 
-        PieItem item = makeItem(R.drawable.ic_settings_holo_light);
-        item.setFixedSlice(FLOAT_PI_DIVIDED_BY_TWO * 3, sweep);
-        item.setOnClickListener(new OnClickListener() {
+        PieItem settingsItem = makeItem(R.drawable.ic_effects_holo_light);
+        settingsItem.setFixedSlice(FLOAT_PI_DIVIDED_BY_TWO *3, sweep);
+        settingsItem.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(PieItem item) {
                 if (mPopup == null) {
                     initializePopup();
                 }
+                mActivePopup = mPopup;
                 mModule.showPopup(mPopup);
             }
         });
-        mRenderer.addItem(item);
+        mRenderer.addItem(settingsItem);
+
+        PieItem pictureItem = makeItem(R.drawable.ic_settings_holo_light);
+        pictureItem.setFixedSlice(3 * FLOAT_PI_DIVIDED_BY_TWO - sweep, sweep);
+        pictureItem.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(PieItem item) {
+                if (mPicturePopup == null) {
+                    initializePicturePopup();
+                }
+                mActivePopup = mPicturePopup;
+                mModule.showPopup(mPicturePopup);
+            }
+        });
+        mRenderer.addItem(pictureItem);
     }
 
     protected void setCameraId(int cameraId) {
@@ -116,6 +143,19 @@ public class VideoController extends PieController
         if (mPopup != null) {
             mPopup.reloadPreference();
         }
+        if (mPicturePopup != null) {
+            mPicturePopup.reloadPreference();
+        }
+    }
+
+    @Override
+    // Hit when an item in the second-level popup gets selected
+    public void onListPrefChanged(ListPreference pref) {
+        if (mActivePopup != null && mSecondPopup != null) {
+                mModule.dismissPopup(true);
+                mActivePopup.reloadPreference();
+        }
+        onSettingChanged(pref);
     }
 
     @Override
@@ -123,18 +163,11 @@ public class VideoController extends PieController
         super.overrideSettings(keyvalues);
         if (mPopup == null) initializePopup();
         mPopup.overrideSettings(keyvalues);
+
+        if (mPicturePopup == null) initializePicturePopup();
+        mPicturePopup.overrideSettings(keyvalues);
     }
 
-    @Override
-    // Hit when an item in the second-level popup gets selected
-    public void onListPrefChanged(ListPreference pref) {
-        if (mPopup != null && mSecondPopup != null) {
-            mModule.dismissPopup(true);
-            mPopup.reloadPreference();
-        }
-        onSettingChanged(pref);
-    }
-    
     protected void initializePopup() {
         LayoutInflater inflater = (LayoutInflater) mActivity.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
@@ -150,13 +183,32 @@ public class VideoController extends PieController
         mPopup = popup;
     }
 
+    protected void initializePicturePopup() {
+        LayoutInflater inflater = (LayoutInflater) mActivity.getSystemService(
+                Context.LAYOUT_INFLATER_SERVICE);
+
+        MoreSettingPopup popup = (MoreSettingPopup) inflater.inflate(
+                R.layout.more_setting_popup, null, false);
+        popup.setSettingChangedListener(this);
+        popup.initialize(mPreferenceGroup, mPictureKeys);
+        mPicturePopup = popup;
+    }
+    
     public void popupDismissed(boolean topPopupOnly) {
+        if (mActivePopup == mPopup){
+            initializePopup();
+            mActivePopup = mPopup;
+        }
+        if (mActivePopup == mPicturePopup){
+            initializePicturePopup();
+            mActivePopup = mPicturePopup; 
+        }
+
         // if the 2nd level popup gets dismissed
         if (mSecondPopup != null) {
             mSecondPopup = null;
-            if (topPopupOnly) mModule.showPopup(mPopup);
+            if (topPopupOnly) mModule.showPopup(mActivePopup);
         }
-        initializePopup();
     }
 
     @Override

@@ -39,7 +39,7 @@
             camera:entries="@array/pref_camera_video_flashmode_entries"
             camera:entryValues="@array/pref_camera_video_flashmode_entryvalues"/>
     <IconListPreference
-            camera:key="pref_camera_exposure_key"
+            camera:key="pref_camera_video_exposure_key"
             camera:defaultValue="@string/pref_exposure_default"
             camera:title="@string/pref_exposure_title"
             camera:singleIcon="@drawable/ic_exposure_holo_light" />
@@ -101,4 +101,16 @@
     <ListPreference
             camera:key="pref_camera_storage_key"
             camera:title="@string/pref_camera_storage_title" />
+    <ListPreference
+            camera:key="pref_camera_video_saturation_key"
+            camera:defaultValue="@string/pref_saturation_default"
+            camera:title="@string/pref_saturation_title" />
+    <ListPreference
+            camera:key="pref_camera_video_contrast_key"
+            camera:defaultValue="@string/pref_contrast_default"
+            camera:title="@string/pref_contrast_title"/>
+    <ListPreference
+            camera:key="pref_camera_video_sharpness_key"
+            camera:defaultValue="@string/pref_sharpness_default"
+            camera:title="@string/pref_sharpness_title" />
 </PreferenceGroup>

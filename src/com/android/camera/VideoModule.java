@@ -436,7 +436,8 @@ public class VideoModule implements CameraModule,
         mActivity.initPowerShutter(mPreferences);
 
         // we need to reset exposure for the preview
-        resetExposureCompensation();
+        // maxwen: nope :)
+        //resetExposureCompensation();
 
         /*
          * To reduce startup time, we start the preview in another thread.
@@ -564,11 +565,11 @@ public class VideoModule implements CameraModule,
     }
 
     private void resetExposureCompensation() {
-        String value = mPreferences.getString(CameraSettings.KEY_EXPOSURE,
+        String value = mPreferences.getString(CameraSettings.KEY_VIDEOCAMERA_EXPOSURE,
                 CameraSettings.EXPOSURE_DEFAULT_VALUE);
         if (!CameraSettings.EXPOSURE_DEFAULT_VALUE.equals(value)) {
             Editor editor = mPreferences.edit();
-            editor.putString(CameraSettings.KEY_EXPOSURE, "0");
+            editor.putString(CameraSettings.KEY_VIDEOCAMERA_EXPOSURE, "0");
             editor.apply();
         }
     }
@@ -857,7 +858,7 @@ public class VideoModule implements CameraModule,
             if (resetEffect()) {
                 mBgLearningMessageFrame.setVisibility(View.GONE);
             }
-            resetExposureCompensation();
+            //resetExposureCompensation();
             openCamera();
             if (mActivity.mOpenCameraFail) {
                 Util.showErrorAndFinish(mActivity,
@@ -2040,7 +2041,7 @@ public class VideoModule implements CameraModule,
         }
 
         // Set exposure compensation
-        int value = CameraSettings.readExposure(mPreferences);
+        int value = CameraSettings.readExposure(mPreferences, CameraSettings.KEY_VIDEOCAMERA_EXPOSURE);
         int max = mParameters.getMaxExposureCompensation();
         int min = mParameters.getMinExposureCompensation();
         if (value >= min && value <= max) {
@@ -2048,6 +2049,17 @@ public class VideoModule implements CameraModule,
         } else {
             Log.w(TAG, "invalid exposure range: " + value);
         }
+
+        if (Util.hasHTCPictureOptions()){     
+            mParameters.set("contrast", mPreferences.getString(CameraSettings.KEY_VIDEOCAMERA_CONTRAST,
+                CameraSettings.CONTRAST_DEFAULT_VALUE));
+            mParameters.set("saturation", mPreferences.getString(CameraSettings.KEY_VIDEOCAMERA_SATURATION,
+                CameraSettings.SATURATION_DEFAULT_VALUE));
+            mParameters.set("sharpness", mPreferences.getString(CameraSettings.KEY_VIDEOCAMERA_SHARPNESS,
+                CameraSettings.SHARPNESS_DEFAULT_VALUE));
+        }
+
+        CameraSettings.dumpParameters(mParameters);
 
         mActivity.mCameraDevice.setParameters(mParameters);
         // Keep preview size up to date.
@@ -2277,33 +2289,32 @@ public class VideoModule implements CameraModule,
             return;
         }
         int id = 0;
-        float step = mParameters.getExposureCompensationStep();
-        value = (int) Math.round(value * step);
+        //float step = mParameters.getExposureCompensationStep();
+        //value = (int) Math.round(value * step);
         switch(value) {
-        case -3:
+        case -12:
             id = R.drawable.ic_indicator_ev_n3;
             break;
-        case -2:
+        case -8:
             id = R.drawable.ic_indicator_ev_n2;
             break;
-        case -1:
+        case -4:
             id = R.drawable.ic_indicator_ev_n1;
             break;
         case 0:
             id = R.drawable.ic_indicator_ev_0;
             break;
-        case 1:
+        case 4:
             id = R.drawable.ic_indicator_ev_p1;
             break;
-        case 2:
+        case 8:
             id = R.drawable.ic_indicator_ev_p2;
             break;
-        case 3:
+        case 12:
             id = R.drawable.ic_indicator_ev_p3;
             break;
         }
         mExposureIndicator.setImageResource(id);
-
     }
 
     @Override
@@ -2389,7 +2400,7 @@ public class VideoModule implements CameraModule,
 
     private void updateOnScreenIndicators() {
         updateFlashOnScreenIndicator(mParameters.getFlashMode());
-        updateExposureOnScreenIndicator(CameraSettings.readExposure(mPreferences));
+        updateExposureOnScreenIndicator(CameraSettings.readExposure(mPreferences, CameraSettings.KEY_VIDEOCAMERA_EXPOSURE));
     }
 
     private void updateFlashOnScreenIndicator(String value) {

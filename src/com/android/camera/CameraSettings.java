@@ -62,6 +62,7 @@ public class CameraSettings {
     public static final String KEY_VIDEOCAMERA_WHITE_BALANCE = "pref_camera_video_whitebalance_key";
     public static final String KEY_SCENE_MODE = "pref_camera_scenemode_key";
     public static final String KEY_EXPOSURE = "pref_camera_exposure_key";
+    public static final String KEY_VIDEOCAMERA_EXPOSURE = "pref_camera_video_exposure_key";
     public static final String KEY_VIDEO_EFFECT = "pref_video_effect_key";
     public static final String KEY_CAMERA_ID = "pref_camera_id_key";
     public static final String KEY_CAMERA_HDR = "pref_camera_hdr_key";
@@ -77,8 +78,18 @@ public class CameraSettings {
     public static final String KEY_TIMER_MODE = "pref_camera_timer_key";
     public static final String KEY_TRUE_PREVIEW = "pref_true_preview";
     public static final String KEY_STORAGE = "pref_camera_storage_key";
-
+    public static final String KEY_SATURATION = "pref_camera_saturation_key";
+    public static final String KEY_VIDEOCAMERA_SATURATION = "pref_camera_video_saturation_key";
+    public static final String KEY_CONTRAST = "pref_camera_contrast_key";
+    public static final String KEY_VIDEOCAMERA_CONTRAST = "pref_camera_video_contrast_key";
+    public static final String KEY_SHARPNESS = "pref_camera_sharpness_key";
+    public static final String KEY_VIDEOCAMERA_SHARPNESS = "pref_camera_video_sharpness_key";
+                
     public static final String EXPOSURE_DEFAULT_VALUE = "0";
+    public static final String SATURATION_DEFAULT_VALUE = "5";
+    public static final String CONTRAST_DEFAULT_VALUE = "0";
+    public static final String SHARPNESS_DEFAULT_VALUE = "0";
+        
     public static final String VALUE_ON = "on";
     public static final String VALUE_OFF = "off";
 
@@ -189,7 +200,15 @@ public class CameraSettings {
         ListPreference colorEffect = group.findPreference(KEY_COLOR_EFFECT);
         ListPreference videoColorEffect = group.findPreference(KEY_VIDEOCAMERA_COLOR_EFFECT);
         ListPreference storage = group.findPreference(KEY_STORAGE);
-
+        IconListPreference videoExposure =
+                (IconListPreference) group.findPreference(KEY_VIDEOCAMERA_EXPOSURE);
+        ListPreference saturation = group.findPreference(KEY_SATURATION);
+        ListPreference videoSaturation = group.findPreference(KEY_VIDEOCAMERA_SATURATION);  
+        ListPreference sharpness = group.findPreference(KEY_SHARPNESS);
+        ListPreference videoSharpness = group.findPreference(KEY_VIDEOCAMERA_SHARPNESS);  
+        ListPreference contrast = group.findPreference(KEY_CONTRAST);
+        ListPreference videoContrast = group.findPreference(KEY_VIDEOCAMERA_CONTRAST);  
+                      
         // Since the screen could be loaded from different resources, we need
         // to check if the preference is available here
         if (videoQuality != null) {
@@ -226,6 +245,7 @@ public class CameraSettings {
                     videoFlashMode, mParameters.getSupportedFlashModes());
         }
         if (exposure != null) buildExposureCompensation(group, exposure);
+        if (videoExposure != null) buildExposureCompensation(group, videoExposure);
         if (cameraIdPref != null) buildCameraId(group, cameraIdPref);
 
         if (timeLapseInterval != null) {
@@ -261,6 +281,51 @@ public class CameraSettings {
         }
         if (storage != null) {
             buildStorage(group, storage);
+        }
+        
+        if (saturation!=null){
+            if (!Util.hasHTCPictureOptions()){
+                removePreference(group, saturation.getKey());
+            } else {
+                buildSaturation(group, saturation);
+            }
+        }
+        if (videoSaturation!=null){
+            if (!Util.hasHTCPictureOptions()){
+                removePreference(group, videoSaturation.getKey());
+            } else {
+                buildSaturation(group, videoSaturation);
+            }
+        }
+
+        if (sharpness!=null){
+            if (!Util.hasHTCPictureOptions()){
+                removePreference(group, sharpness.getKey());
+            } else {
+                buildSharpness(group, sharpness);
+            }
+        }
+        if (videoSharpness!=null){
+            if (!Util.hasHTCPictureOptions()){
+                removePreference(group, videoSharpness.getKey());
+            } else {
+                buildSharpness(group, videoSharpness);
+            }
+        }
+
+        if (contrast!=null){
+            if (!Util.hasHTCPictureOptions()){
+                removePreference(group, contrast.getKey());
+            } else {
+                buildContrast(group, contrast);
+            }
+        }
+        if (videoContrast!=null){
+            if (!Util.hasHTCPictureOptions()){
+                removePreference(group, videoContrast.getKey());
+            } else {
+                buildContrast(group, videoContrast);
+            }
         }
     }
 
@@ -299,8 +364,8 @@ public class CameraSettings {
             PreferenceGroup group, IconListPreference exposure) {
         
         //HOX+ max exposure = 12, min exposure = -12, step = 0.1
-        CharSequence entries[] = new CharSequence[7];
-        CharSequence entryValues[] = new CharSequence[7];
+        String entries[] = new String[7];
+        String entryValues[] = new String[7];
         int[] icons = new int[7];
 
         entries[6] = "-3";
@@ -334,6 +399,49 @@ public class CameraSettings {
         exposure.setLargeIconIds(icons);
     }
 
+    private void buildSaturation(PreferenceGroup group, ListPreference saturation){
+        String entries[] = new String[11];
+        String entryValues[] = new String[11];
+
+        for(int i=0; i<entries.length; i++){
+            entries[i] = Integer.toString(i);
+            entryValues[i] = Integer.toString(i);
+        }
+ 
+        saturation.setEntries(entries);
+        saturation.setEntryValues(entryValues);
+    }
+
+    private void buildSharpness(PreferenceGroup group, ListPreference sharpness){
+        String entries[] = new String[5];
+        String entryValues[] = new String[5];
+
+        int j=-2;
+        for(int i=0; i<entries.length; i++){
+            entries[i] = Integer.toString(j);
+            entryValues[i] = Integer.toString(j);
+            j+=1;
+        }
+ 
+        sharpness.setEntries(entries);
+        sharpness.setEntryValues(entryValues);
+    }
+
+    private void buildContrast(PreferenceGroup group, ListPreference contrast){
+        String entries[] = new String[11];
+        String entryValues[] = new String[11];
+
+        int j=-100;
+        for(int i=0; i<entries.length; i++){
+            entries[i] = Integer.toString(j);
+            entryValues[i] = Integer.toString(j);
+            j+=20;
+        }
+ 
+        contrast.setEntries(entries);
+        contrast.setEntryValues(entryValues);
+    }    
+    
     private void buildCameraId(
             PreferenceGroup group, IconListPreference preference) {
         int numOfCameras = mCameraInfo.length;
@@ -506,9 +614,9 @@ public class CameraSettings {
         editor.apply();
     }
 
-    public static int readExposure(ComboPreferences preferences) {
+    public static int readExposure(ComboPreferences preferences, String key) {
         String exposure = preferences.getString(
-                CameraSettings.KEY_EXPOSURE,
+                key,
                 EXPOSURE_DEFAULT_VALUE);
         try {
             return Integer.parseInt(exposure);
