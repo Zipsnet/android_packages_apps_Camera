@@ -38,6 +38,8 @@
     <bool name="noFaceDetectOnFrontCamera">false</bool>
     <!-- Use ZSL mode for Qualcomm cameras -->
     <bool name="enableZSL">false</bool>
-    <!-- extended picture paramaters - contrast, saturation, sharpness -->
+    <!-- HTC extended picture paramaters - contrast, saturation, sharpness -->
     <bool name="hasHTCPictureOptions">true</bool>
+    <!-- manual zoom step - volume keys -->
+    <integer name="manualZoomStep">5</integer>
 </resources>

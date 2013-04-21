@@ -1110,13 +1110,13 @@ public class VideoModule implements CameraModule,
                 break;
             case KeyEvent.KEYCODE_VOLUME_UP:
                 if (mParameters.isZoomSupported() && mZoomRenderer != null) {
-                    int index = mZoomValue + 1;
+                    int index = mZoomValue + Util.getManualZoomStep();
                     processZoomValueChanged(index);
                 }
                 return true;
             case KeyEvent.KEYCODE_VOLUME_DOWN:
                 if (mParameters.isZoomSupported() && mZoomRenderer != null) {
-                    int index = mZoomValue - 1;
+                    int index = mZoomValue - Util.getManualZoomStep();
                     processZoomValueChanged(index);
                 }
                 return true;

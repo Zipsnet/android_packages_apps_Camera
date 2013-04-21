@@ -140,6 +140,7 @@ public class Util {
     private static boolean sHTCCamMode;
     private static boolean sNoFaceDetect;
     private static boolean sHTCPictureOptions;
+    private static int sManualZoomStep;
 
     // For setting video size before recording starts
     private static boolean sEarlyVideoSize;
@@ -169,7 +170,8 @@ public class Util {
         sSamsungCamMode = context.getResources().getBoolean(R.bool.needsSamsungCamMode);
         sHTCCamMode = context.getResources().getBoolean(R.bool.needsHTCCamMode);
         sHTCPictureOptions = context.getResources().getBoolean(R.bool.hasHTCPictureOptions);
-
+        sManualZoomStep = context.getResources().getInteger(R.integer.manualZoomStep);
+        
         sProfileVideoSize = context.getResources().getBoolean(R.bool.useProfileVideoSize);
         sEarlyVideoSize = context.getResources().getBoolean(R.bool.needsEarlyVideoSize);
         sEnableZSL = context.getResources().getBoolean(R.bool.enableZSL);
@@ -837,5 +839,9 @@ public class Util {
 
             return result;
         }
+    }
+
+    public static int getManualZoomStep() {
+        return sManualZoomStep;
     }
 }
