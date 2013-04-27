@@ -84,6 +84,7 @@ public class CameraSettings {
     public static final String KEY_SHARPNESS = "pref_camera_sharpness_key";
     public static final String KEY_VIDEOCAMERA_SHARPNESS = "pref_camera_video_sharpness_key";
     public static final String KEY_VOICE_SHUTTER = "pref_voice_shutter_key";
+    public static final String KEY_TIMER_MODE = "pref_camera_timer_key";
 
     public static final String EXPOSURE_DEFAULT_VALUE = "0";
     public static final String SATURATION_DEFAULT_VALUE = "5";
