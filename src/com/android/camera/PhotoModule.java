@@ -115,8 +115,7 @@ public class PhotoModule
     private static final int START_PREVIEW_DONE = 10;
     private static final int OPEN_CAMERA_FAIL = 11;
     private static final int CAMERA_DISABLED = 12;
-    private static final int CAMERA_TIMER = 13;
-    
+
     // The subset of parameters we need to update in setCameraParameters().
     private static final int UPDATE_PARAM_INITIALIZE = 1;
     private static final int UPDATE_PARAM_ZOOM = 2;
@@ -300,10 +299,6 @@ public class PhotoModule
     private int mBurstShotsDone = 0;
     private boolean mBurstShotInProgress = false;
 
-    // Camera timer.
-    private boolean mTimerMode = false;
-	private int mCaptureMode = 0;
-		
     private boolean mQuickCapture;
 
     CameraStartUpThread mCameraStartUpThread;
@@ -441,12 +436,6 @@ public class PhotoModule
                             R.string.camera_disabled);
                     break;
                 }
-                
-                case CAMERA_TIMER: {
-                    updateTimer(msg.arg1);
-                    break;
-                }
-
             }
         }
     }
@@ -1638,23 +1627,13 @@ public class PhotoModule
 
     @Override
     public void onShutterButtonFocus(boolean pressed) {
-		mCaptureMode = Integer.valueOf(mPreferences.getString(CameraSettings.KEY_TIMER_MODE, "0"));
-
-        if (!mTimerMode) {
-            if (mCaptureMode != 0) {
-                mTimerMode = true;
-            }
-        }
-
-        if (mTimerMode || mPaused || collapseCameraControls()
+        if (mPaused || collapseCameraControls()
                 || (mCameraState == SNAPSHOT_IN_PROGRESS)
                 || (mCameraState == PREVIEW_STOPPED)) return;
 
         // Do not do focus if there is not enough storage.
         if (pressed && !canTakePicture()) return;
 
-        Log.d(TAG, "onShutterButtonFocus: mCameraState=" + mCameraState);
-        
         if (pressed) {
             if (mSceneMode == Util.SCENE_MODE_HDR) {
                 mActivity.hideSwitcher();
@@ -1668,6 +1647,8 @@ public class PhotoModule
 
     @Override
     public void onShutterButtonClick() {
+        int nbBurstShots = Integer.valueOf(mPreferences.getString(CameraSettings.KEY_BURST_MODE, "1"));
+
         if (mPaused || collapseCameraControls()
                 || (mCameraState == SWITCHING_CAMERA)
                 || (mCameraState == PREVIEW_STOPPED)) return;
@@ -1678,15 +1659,7 @@ public class PhotoModule
                     + mActivity.getStorageSpace());
             return;
         }
-
-        Log.d(TAG, "onShutterButtonClick: mCameraState=" + mCameraState);
-
-        if (mTimerMode) {
-            updateTimer(mCaptureMode);
-            return;
-        }
-
-        int nbBurstShots = Integer.valueOf(mPreferences.getString(CameraSettings.KEY_BURST_MODE, "1"));
+        Log.v(TAG, "onShutterButtonClick: mCameraState=" + mCameraState);
 
         // If the user wants to do a snapshot while the previous one is still
         // in progress, remember the fact and do it after we finish the previous
@@ -2823,21 +2796,6 @@ public class PhotoModule
     public void onShowSwitcherPopup() {
         if (mPieRenderer != null && mPieRenderer.showsItems()) {
             mPieRenderer.hide();
-        }
-    }
-    
-    private void updateTimer(int timerSeconds) {
-        timerSeconds--;
-        if (timerSeconds < 0) {
-            mFocusManager.onShutterDown();
-            mFocusManager.doSnap();
-            mTimerMode = false;
-            mHandler.removeMessages(CAMERA_TIMER);
-        } else {
-            Message timerMsg = Message.obtain();
-            timerMsg.arg1 = timerSeconds;
-            timerMsg.what = CAMERA_TIMER;
-            mHandler.sendMessageDelayed(timerMsg, 1000);
         }
     }
 }

@@ -75,7 +75,6 @@ public class CameraSettings {
     public static final String KEY_COLOR_EFFECT = "pref_camera_coloreffect_key";
     public static final String KEY_VIDEOCAMERA_COLOR_EFFECT = "pref_camera_video_coloreffect_key";
     public static final String KEY_BURST_MODE = "pref_camera_burst_key";
-    public static final String KEY_TIMER_MODE = "pref_camera_timer_key";
     public static final String KEY_TRUE_PREVIEW = "pref_true_preview";
     public static final String KEY_STORAGE = "pref_camera_storage_key";
     public static final String KEY_SATURATION = "pref_camera_saturation_key";
