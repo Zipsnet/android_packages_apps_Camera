@@ -101,7 +101,7 @@ public class PhotoController extends PieController
             });
             mRenderer.addItem(hdr);
         }
-        addItem(CameraSettings.KEY_NOHANDS_MODE, (float)(1.5 * FLOAT_PI_DIVIDED_BY_TWO) + sweep, sweep);
+        addItem(CameraSettings.KEY_NOHANDS_MODE, (float)(3.5 * FLOAT_PI_DIVIDED_BY_TWO) + sweep, sweep);
         mOtherKeys = new String[] {
                 CameraSettings.KEY_STORAGE,
                 CameraSettings.KEY_RECORD_LOCATION,
@@ -111,7 +111,7 @@ public class PhotoController extends PieController
                 CameraSettings.KEY_FOCUS_MODE,
                 CameraSettings.KEY_FOCUS_TIME,
                 CameraSettings.KEY_JPEG,
-                CameraSettings.KEY_COLOR_EFFECT,
+
                 CameraSettings.KEY_PERSISTENT_NOHANDS,
                 CameraSettings.KEY_BURST_MODE,
                 CameraSettings.KEY_FLASH_MODE};
