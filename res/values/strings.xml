@@ -564,4 +564,7 @@ CHAR LIMIT = NONE] -->
 
     <string name="pref_sharpness_title">Sharpness</string>
     <string name="pref_sharpness_default">0</string>
+
+    <string name="pref_camera_voiceshutter_title">Voice-triggered shutter</string>
+    <string name="pref_camera_voiceshutter_default" translatable="false">@string/setting_off_value</string>
 </resources>
