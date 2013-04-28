@@ -556,9 +556,15 @@
     <string-array name="pref_camera_voiceshutter_triggerwords">
         <item>cid</item>
         <item>civ</item>
+        <item>kang</item>
+        <item>kane</item>
+        <item>cane</item>
         <item>whisky</item>
         <item>whiskey</item>
         <item>cheese</item>
+        <item>swag</item>
+        <item>schwag</item>
+        <item>swagger</item>
     </string-array>
 
     <!-- Camera Preferences for No-Hands shots (Voice / Timer) -->
