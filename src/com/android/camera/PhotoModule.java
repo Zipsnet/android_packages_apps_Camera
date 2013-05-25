@@ -1993,6 +1993,16 @@ public class PhotoModule
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         Log.v(TAG, "onConfigurationChanged");
+
+        // Wait for camera initialization
+        try {
+            if (mCameraStartUpThread != null) {
+                mCameraStartUpThread.join();
+            }
+        } catch (InterruptedException iex) {
+            // Ignore.
+        }
+
         setDisplayOrientation();
 
         ((ViewGroup) mRootView).removeAllViews();
