@@ -86,18 +86,18 @@ public class VideoController extends PieController
         }
         mOtherKeys = new String[] {
                 CameraSettings.KEY_STORAGE,
-                CameraSettings.KEY_VIDEO_EFFECT,
-                CameraSettings.KEY_VIDEO_TIME_LAPSE_FRAME_INTERVAL,
-                CameraSettings.KEY_VIDEO_QUALITY,
                 CameraSettings.KEY_RECORD_LOCATION,
                 CameraSettings.KEY_POWER_SHUTTER,
-                CameraSettings.KEY_TRUE_PREVIEW};
+                CameraSettings.KEY_TRUE_PREVIEW,
+                CameraSettings.KEY_VIDEO_QUALITY,
+                CameraSettings.KEY_VIDEO_EFFECT,
+                CameraSettings.KEY_VIDEOCAMERA_JPEG,
+                CameraSettings.KEY_VIDEO_TIME_LAPSE_FRAME_INTERVAL};
 
         mPictureKeys= new String[] {
                 CameraSettings.KEY_VIDEOCAMERA_FLASH_MODE,
                 CameraSettings.KEY_VIDEOCAMERA_WHITE_BALANCE,
                 CameraSettings.KEY_VIDEOCAMERA_COLOR_EFFECT,
-                CameraSettings.KEY_VIDEOCAMERA_JPEG,
                 CameraSettings.KEY_VIDEOCAMERA_EXPOSURE,
                 CameraSettings.KEY_VIDEOCAMERA_SATURATION,
                 CameraSettings.KEY_VIDEOCAMERA_CONTRAST,
