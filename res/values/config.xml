@@ -42,4 +42,5 @@
     <bool name="hasHTCPictureOptions">true</bool>
     <!-- manual zoom step - volume keys -->
     <integer name="manualZoomStep">5</integer>
+    <string name="videoHdrParam">video-hdr</string>
 </resources>

@@ -87,6 +87,7 @@ public class CameraSettings {
     public static final String KEY_VIDEOCAMERA_SHARPNESS = "pref_camera_video_sharpness_key";
     public static final String KEY_NOHANDS_MODE = "pref_nohands_shutter_key";
     public static final String KEY_PERSISTENT_NOHANDS = "pref_nohands_persistent_key";
+    public static final String KEY_VIDEO_HDR = "pref_video_hdr_key";
 
     public static final String EXPOSURE_DEFAULT_VALUE = "0";
     public static final String SATURATION_DEFAULT_VALUE = "5";
@@ -211,6 +212,7 @@ public class CameraSettings {
         ListPreference videoSharpness = group.findPreference(KEY_VIDEOCAMERA_SHARPNESS);  
         ListPreference contrast = group.findPreference(KEY_CONTRAST);
         ListPreference videoContrast = group.findPreference(KEY_VIDEOCAMERA_CONTRAST);  
+        ListPreference videoHdr = group.findPreference(KEY_VIDEO_HDR);
 
         // Since the screen could be loaded from different resources, we need
         // to check if the preference is available here
@@ -329,6 +331,10 @@ public class CameraSettings {
             } else {
                 buildContrast(group, videoContrast);
             }
+        }
+        if (videoHdr != null &&
+            !Util.isVideoHdrSupported(mParameters)) {
+            removePreference(group, videoHdr.getKey());
         }
     }
 
