@@ -311,7 +311,7 @@
 	</array>
 
     <!-- Camera Preferences Scene Mode dialog box entries -->
-    <!-- auto,action,portrait,landscape,beach,fireworks,night,night-portrait,snow,sports,steadyphoto,sunset,theatre,barcode,candlelight,beauty-mode,background-blur,backlight-hdr,close-up,white-board,flowers,backlight,backlight_portrait,text
+    <!-- auto,action,portrait,landscape,beach,fireworks,night,night-portrait,snow,sports,steadyphoto,sunset,theatre,barcode,candlelight,beauty-mode,background-blur,hdr,close-up,white-board,flowers,backlight,backlight_portrait,text
 -->
     <string-array name="pref_camera_scenemode_entries" translatable="false">
         <item>@string/pref_camera_scenemode_entry_auto</item>
@@ -347,7 +347,7 @@
         <item>beach</item>
         <item>background-blur</item>
         <item>backlight</item>
-        <item>backlight-hdr</item>
+        <item>hdr</item>
         <item>backlight_portrait</item>
         <item>beauty-mode</item>
         <item>candlelight</item>
